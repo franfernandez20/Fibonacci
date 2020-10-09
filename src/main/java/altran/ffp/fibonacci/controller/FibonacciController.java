@@ -15,12 +15,8 @@ import altran.ffp.fibonacci.service.FibonacciService;
 @RequestMapping("/fibonacci")
 public class FibonacciController {
 	
-	private final FibonacciService fibonacciService;
-
-    @Autowired
-    public FibonacciController(final FibonacciService fibonacciService) {
-        this.fibonacciService = fibonacciService;
-    }
+	@Autowired
+	private FibonacciService fibonacciService;
 
     @GetMapping("/recursive/{num}")
     public BigInteger getRecursiveNumberFibonacci(@PathVariable("num") int num) {   	

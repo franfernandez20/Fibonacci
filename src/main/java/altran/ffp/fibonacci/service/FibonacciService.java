@@ -1,39 +1,38 @@
 package altran.ffp.fibonacci.service;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import altran.ffp.fibonacci.utils.FibonacciFunction;
-
+import altran.ffp.fibonacci.functions.Fibonacci;
 
 @Service
 public class FibonacciService {
-	
-	// Used as a simple cache to increase the performance of cachedRecursiveFibonacci in execution an between executions 
-	static HashMap<Integer,BigInteger> cache = new HashMap<Integer,BigInteger>();
     
+	@Autowired
+    @Qualifier("recursive")
+    private Fibonacci fibonacciRecursive;
+	
+	@Autowired
+    @Qualifier("recursiveCached")
+    private Fibonacci fibonacciRecursiveCached;
+	
+	@Autowired
+    @Qualifier("iterative")
+    private Fibonacci fibonacciIterative;
+	
     public BigInteger recursiveFibonacci(int num) {
-    	if (num == 1 || num == 0) return BigInteger.valueOf(num);
-    	if (num > 1) return recursiveFibonacci(num - 1).add(recursiveFibonacci(num - 2));
-    	//error not valid input
-    	return BigInteger.valueOf(-1); 
+    	return fibonacciRecursive.calculate(num);
     }
     
     public BigInteger cachedRecursiveFibonacci(int num) {
-    	if (num < 0) return BigInteger.valueOf(-1);
-    	if (num == 1 || num == 0) return BigInteger.valueOf(num);
-    	
-    	if(cache.get(num) == null) {
-    		cache.put(num, cachedRecursiveFibonacci(num - 1).add(cachedRecursiveFibonacci(num - 2)));
-    	}
-    	return cache.get(num);
+    	return fibonacciRecursiveCached.calculate(num);
     }
     
     public BigInteger lambdaFibonacci(int num) {
-    	if (num < 0) return BigInteger.valueOf(-1);
-    	return FibonacciFunction.generate(num);
+    	return fibonacciIterative.calculate(num);
     }
 
 }
